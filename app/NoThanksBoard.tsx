@@ -2,8 +2,6 @@
 // import { useState, useEffect } from 'react';
 import { NoThanksState } from './NoThanks';
 
-
-
 interface NoThanksBoardProps {
   gameState: NoThanksState;
   actionHandler: (action: number) => void;
@@ -76,7 +74,7 @@ interface NoThanksActionAreaProps {
   gameState: NoThanksState;
   actionHandler: (action : number) => void;
 }
-function NoThanksActionArea({ gameState, actionHandler }: NoThanksActionAreaProps) {
+function NoThanksActionArea({ actionHandler }: NoThanksActionAreaProps) {
   return (
     <div className="flex gap-2 flex-row justify-center">
       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl"

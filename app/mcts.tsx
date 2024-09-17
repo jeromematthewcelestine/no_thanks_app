@@ -1,8 +1,8 @@
 export interface MCTSGameState {
   getNPlayers(): number;
   getCurrentPlayer(): number;
-  applyAction(action: any): void;
-  getLegalActions(): any[];
+  applyAction(action: number): void;
+  getLegalActions(): number[];
   clone(): MCTSGameState;
   isGameOver(): boolean;
   getValues(): number[]; // Array of results, one for each player
@@ -12,11 +12,11 @@ class MCTSNode {
   state: MCTSGameState;
   parent: MCTSNode | null;
   children: MCTSNode[];
-  action: any | null;
+  action: number | null;
   value: number;
   visits: number;
 
-  constructor(state: MCTSGameState, parent: MCTSNode | null = null, action: any | null = null) {
+  constructor(state: MCTSGameState, parent: MCTSNode | null = null, action: number | null = null) {
     this.state = state;
     this.parent = parent;
     this.children = [];
@@ -26,7 +26,9 @@ class MCTSNode {
   }
 }
 
-export function mcts(rootState: MCTSGameState, timeLimitSeconds: number, verbose : boolean = false): any {
+export function mcts(rootState: MCTSGameState, 
+  timeLimitSeconds: number, 
+  verbose : boolean = false): number {
   const root = new MCTSNode(rootState);
 
   const startTime = Date.now();
@@ -56,7 +58,7 @@ export function mcts(rootState: MCTSGameState, timeLimitSeconds: number, verbose
   root.children.forEach(child => console.log(child.action, child.value, child.visits, child.value / child.visits));
 
   const bestChild = root.children.reduce((a, b) => (a.visits > b.visits ? a : b));
-  return bestChild.action;
+  return bestChild.action || -1;
 }
 
 function is_leaf(node: MCTSNode): boolean {
@@ -103,7 +105,7 @@ function expand(node: MCTSNode): MCTSNode {
 }
 
 function simulate(state: MCTSGameState): number[] {
-  let childState = state.clone();
+  const childState = state.clone();
   
   while (!childState.isGameOver()) {
     const legalActions = childState.getLegalActions();
