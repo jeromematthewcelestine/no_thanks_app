@@ -1,6 +1,6 @@
 
-import { useState, useEffect } from 'react';
-import { NoThanksGame, NoThanksState } from './NoThanks';
+// import { useState, useEffect } from 'react';
+import { NoThanksState } from './NoThanks';
 
 
 
@@ -56,7 +56,7 @@ function PlayerInfoArea({ gameState, playerIndex }: PlayerInfoAreaProps) {
           {gameState.playerCardsGrouped[playerIndex].map((cardGroup, i) => (
             <div key={i} className="flex ">
               {cardGroup.map((cardNumber, j) => (
-                <div className="p-0">
+                <div key={cardNumber} className="p-0">
                   <GameCard key={j} cardNumber={cardNumber} />
                 </div>
               ))}

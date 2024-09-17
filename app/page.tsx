@@ -1,9 +1,9 @@
 "use client"
 
-import Image from "next/image";
+// import Image from "next/image";
 import NoThanksBoard from "./NoThanksBoard";
 import { NoThanksGame, NoThanksState } from "./NoThanks";
-import { mcts } from "./mcts";
+// import { mcts } from "./mcts";
 import { useEffect, useState } from "react";
 
 export default function App() {

@@ -156,7 +156,7 @@ export class NoThanksState implements MCTSGameState {
 
       let prevCard = -1;
       let currentGroup : number[] = [];
-      for (let card of cardsSorted) {
+      for (const card of cardsSorted) {
         if (card == prevCard + 1) {
           currentGroup.push(card);
         } else {
@@ -217,7 +217,7 @@ export class NoThanksState implements MCTSGameState {
       // coins are tie breaker
       let maxCoins = -1;
       let maxCoinsPlayers : number[] = [];
-      for (let player of minScorePlayers) {
+      for (const player of minScorePlayers) {
         if (this.playerCoins[player] > maxCoins) {
           maxCoins = this.playerCoins[player];
           maxCoinsPlayers = [player];
@@ -245,7 +245,7 @@ export class NoThanksState implements MCTSGameState {
       // console.log(sortedPlayerCards);
       let score = 0;
       let prevCard = -1;
-      for (let card of sortedPlayerCards) {
+      for (const card of sortedPlayerCards) {
         if (card !== prevCard + 1) {
           score += card;
         }
