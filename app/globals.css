@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+.card-value-3 { color:#fa6e6e; border-color: #fa6e6e}
+.card-value-4 { color:#f66b73; border-color:#f66b73}
+.card-value-5 { color:#f26878; border-color:#f26878}
+.card-value-6 { color:#ed667d; border-color:#ed667d}
+.card-value-7 { color:#e86482; border-color:#e86482}
+.card-value-8 { color:#e26286; border-color:#e26286}
+.card-value-9 { color:#dc618a; border-color:#dc618a}
+.card-value-10 { color:#d5618e; border-color:#d5618e}
+.card-value-11 { color:#ce6091; border-color:#ce6091}
+.card-value-12 { color:#c76094; border-color:#c76094}
+.card-value-13 { color:#bf6096; border-color:#bf6096}
+.card-value-14 { color:#b76098; border-color:#b76098}
+.card-value-15 { color:#af6099; border-color:#af6099}
+.card-value-16 { color:#a7609a; border-color:#a7609a}
+.card-value-17 { color:#9f609b; border-color:#9f609b}
+.card-value-18 { color:#96609b; border-color:#96609b}
+.card-value-19 { color:#8e609b; border-color:#8e609b}
+.card-value-20 { color:#855f9a; border-color:#855f9a}
+.card-value-21 { color:#7d5f98; border-color:#7d5f98}
+.card-value-22 { color:#745f97; border-color:#745f97}
+.card-value-23 { color:#6c5e94; border-color:#6c5e94}
+.card-value-24 { color:#655d92; border-color:#655d92}
+.card-value-25 { color:#5d5d8f; border-color:#5d5d8f}
+.card-value-26 { color:#565c8b; border-color:#565c8b}
+.card-value-27 { color:#4f5a88; border-color:#4f5a88}
+.card-value-28 { color:#485984; border-color:#485984}
+.card-value-29 { color:#42587f; border-color:#42587f}
+.card-value-30 { color:#3d567b; border-color:#3d567b}
+.card-value-31 { color:#385476; border-color:#385476}
+.card-value-32 { color:#345371; border-color:#345371}
+.card-value-33 { color:#31516c; border-color:#31516c}
+.card-value-34 { color:#2e4f67; border-color:#2e4f67}
+.card-value-35 { color:#2c4d62; border-color:#2c4d62}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

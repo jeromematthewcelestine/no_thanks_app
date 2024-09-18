@@ -12,7 +12,7 @@ export default function NoThanksBoard({gameState, actionHandler} : NoThanksBoard
   console.log(gameState.toString());
 
   return (
-    <div className="border-2 border-black flex flex-col gap-2 p-2 max-w-2xl">
+    <div className="flex flex-col gap-2 p-2 min-w-[24rem] max-w-[48rem]">
       <MessageArea message={`It is Player ${gameState.currentPlayer}'s turn.`} />
 
       <NoThanksActionArea gameState={gameState} actionHandler={actionHandler} />
@@ -41,31 +41,23 @@ interface PlayerAreaProps {
 }
 function PlayerArea({ gameState, playerIndex }: PlayerAreaProps) {
   return (
-    <div className="border-black border-dashed border rounded-xl p-2 flex flex-row gap-1 items-start"> {/* overall player info */}
+    <div className={`border-black border-dashed border border-gray-500 rounded-xl p-2 flex flex-row gap-1 items-start ${gameState.currentPlayer == playerIndex ? ' bg-[beige] ' : ' bg-white '}`}> {/* overall player info */}
       <div className="flex flow-col justify-start grow-0 shrink-0">
-        <div className="border border-black flex flex-col"> {}
+        <div className="bg-white border border-gray-200 border-dashed rounded-xl p-2 flex flex-col"> {}
           <div className="">Player {playerIndex}</div>
           <div className="">Coins: {gameState.playerCoins[playerIndex]}</div>
         </div>
       </div>
       
       <div className="flex flow-col justify-start">
-        <div className="flex flow-row gap-2 flex-wrap">
+        <div className="flex flow-row gap-3 flex-wrap">
           {gameState.playerCardsGrouped[playerIndex].map((cardGroup, i) => (
             <div key={i} className="flex flex-row-reverse">
-              {/* iterate through each card in reverse order */}
-              {}
-
               {cardGroup.slice().reverse().map((cardNumber, j) => (
-                /* set startOfGroup to true for last card in group */
                 <GameCard key={j} cardNumber={cardNumber} startOfGroup={j === cardGroup.length - 1} />                
-
               ))}
             </div>
           ))}
-          {/* {gameState.playerCards[playerIndex].map((cardNumber, i) => (
-            <GameCard key={i} cardNumber={cardNumber} />
-          ))} */}
         </div>
       </div>
     </div>
@@ -80,15 +72,15 @@ interface NoThanksActionAreaProps {
 function NoThanksActionArea({ actionHandler }: NoThanksActionAreaProps) {
   return (
     <div className="flex gap-2 flex-row justify-center">
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl"
+      <button className="bg-[red] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl"
         onClick={() => actionHandler(NoThanksState.ACTION_TAKE)}
       >
-        Take Card
+        TAKE CARD
       </button>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl"
+      <button className="bg-[red] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl"
         onClick={() => actionHandler(NoThanksState.ACTION_PASS)}
       >
-        Pass
+        PASS
       </button>
     </div>
   );
@@ -96,7 +88,7 @@ function NoThanksActionArea({ actionHandler }: NoThanksActionAreaProps) {
 
 function MessageArea({ message }: { message: string }) {
   return (
-    <div className="rounded-xl p-2">
+    <div className="rounded-xl p-2 bg-[gold] flex flex-row justify-center font-bold">
       {message}
     </div>
   );
@@ -110,12 +102,10 @@ function GameCard({ cardNumber, startOfGroup }: GameCardProps) {
   return (
     <div className={
       startOfGroup 
-      ? `relative rounded-md p-0.5 border border-black w-[40px] h-[60px] flex flex-col justify-center items-center font-bold bg-white`
-      : `relative rounded-md p-0.5 bg-white border border-black w-[40px] h-[60px] flex flex-col justify-start items-end text-sm ml-[-20px]`}>
-      {cardNumber}
-      {/*<div className="text-xs self-end">{cardNumber}</div>*/}
-      
-      {/*<div className="text-xs self-start">&nbsp;</div>*/}
+      ? `card-value-${cardNumber} relative rounded-md p-0.5 bg-white border border-2 w-[40px] h-[60px] flex flex-col justify-center items-center font-bold `
+      : `card-value-${cardNumber} relative rounded-md p-0.5 bg-white border border-2 w-[40px] h-[60px] flex flex-col justify-start items-end text-sm ml-[-20px] font-bold`}>
+        {cardNumber}
+        
     </div>
   );
 }
