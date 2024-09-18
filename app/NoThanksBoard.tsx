@@ -12,7 +12,7 @@ export default function NoThanksBoard({gameState, actionHandler} : NoThanksBoard
   console.log(gameState.toString());
 
   return (
-    <div className="border-2 border-black flex flex-col gap-2 p-2">
+    <div className="border-2 border-black flex flex-col gap-2 p-2 max-w-2xl">
       <MessageArea message={`It is Player ${gameState.currentPlayer}'s turn.`} />
 
       <NoThanksActionArea gameState={gameState} actionHandler={actionHandler} />
@@ -28,18 +28,18 @@ export default function NoThanksBoard({gameState, actionHandler} : NoThanksBoard
         </div>
       )}
       {Array.from({ length: gameState.game.numPlayers }).map((_, i) => (
-        <PlayerInfoArea key={i} gameState={gameState} playerIndex={i} />
+        <PlayerArea key={i} gameState={gameState} playerIndex={i} />
       ))}
     </div>
   );
 }
 
 
-interface PlayerInfoAreaProps {
+interface PlayerAreaProps {
   gameState: NoThanksState;
   playerIndex: number;
 }
-function PlayerInfoArea({ gameState, playerIndex }: PlayerInfoAreaProps) {
+function PlayerArea({ gameState, playerIndex }: PlayerAreaProps) {
   return (
     <div className="border-black border-dashed border rounded-xl p-2 flex flex-row gap-1 items-start"> {/* overall player info */}
       <div className="flex flow-col justify-start grow-0 shrink-0">
@@ -52,11 +52,14 @@ function PlayerInfoArea({ gameState, playerIndex }: PlayerInfoAreaProps) {
       <div className="flex flow-col justify-start">
         <div className="flex flow-row gap-2 flex-wrap">
           {gameState.playerCardsGrouped[playerIndex].map((cardGroup, i) => (
-            <div key={i} className="flex ">
-              {cardGroup.map((cardNumber, j) => (
-                <div key={cardNumber} className="p-0">
-                  <GameCard key={j} cardNumber={cardNumber} />
-                </div>
+            <div key={i} className="flex flex-row-reverse">
+              {/* iterate through each card in reverse order */}
+              {}
+
+              {cardGroup.slice().reverse().map((cardNumber, j) => (
+                /* set startOfGroup to true for last card in group */
+                <GameCard key={j} cardNumber={cardNumber} startOfGroup={j === cardGroup.length - 1} />                
+
               ))}
             </div>
           ))}
@@ -99,10 +102,21 @@ function MessageArea({ message }: { message: string }) {
   );
 }
 
-function GameCard({ cardNumber }: { cardNumber: number }) {
+interface GameCardProps {
+  cardNumber: number;
+  startOfGroup: boolean;
+}
+function GameCard({ cardNumber, startOfGroup }: GameCardProps) {
   return (
-    <div className="rounded-xl p-2 bg-amber-200 w-[40px] h-[60px]">
+    <div className={
+      startOfGroup 
+      ? `relative rounded-md p-0.5 border border-black w-[40px] h-[60px] flex flex-col justify-center items-center font-bold bg-white`
+      : `relative rounded-md p-0.5 bg-white border border-black w-[40px] h-[60px] flex flex-col justify-start items-end text-sm ml-[-20px]`}>
       {cardNumber}
+      {/*<div className="text-xs self-end">{cardNumber}</div>*/}
+      
+      {/*<div className="text-xs self-start">&nbsp;</div>*/}
     </div>
   );
 }
+/*  - move left by 1rem */
