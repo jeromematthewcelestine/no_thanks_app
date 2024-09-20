@@ -6,10 +6,9 @@ import { NoThanksGame, NoThanksState } from "./NoThanks";
 import { useEffect, useState } from "react";
 
 
-
 export default function App() {
 
-  const game = new NoThanksGame(
+  let game = new NoThanksGame(
     3,
     35,
     3,
@@ -19,9 +18,10 @@ export default function App() {
 
   const [gameState, setGameState] = useState<NoThanksState>();
   const [humanPlayer, setHumanPlayer] = useState(0);
-  const [playerNames, setPlayerNames] = useState(["Player", "Alice", "Bob"]);
+  const [playerNames, setPlayerNames] = useState(["Player", "Alice", "Bob", "Charles", "Delia"]);
   const [botType, setBotType] = useState("mcts01");
   const [isBotTurn, setIsBotTurn] = useState(false);
+  const [newGameNumPlayers, setNewGameNumPlayers] = useState(3);  
 
   useEffect(() => {
     setGameState(new NoThanksState(game));
@@ -32,6 +32,18 @@ export default function App() {
       handleBotTurn();
     }
   }, [gameState]);
+
+  const handleNewGame = () => {
+    console.log('newGameNumPlayers', newGameNumPlayers);
+    game = new NoThanksGame(
+      3,
+      35,
+      newGameNumPlayers,
+      11,
+      9
+    );
+    setGameState(new NoThanksState(game));
+  }
 
   const handleBotTurn = async () => {
     console.log("handleBotTurn");
@@ -81,20 +93,36 @@ export default function App() {
       <div id="title">
         NoThanksBot
       </div>
-      <div>
-        {gameState && 
+      {gameState &&
+      <div className="flex flex-col items-center gap-2">
+          
         <NoThanksBoard 
           gameState={gameState} 
           humanPlayer={humanPlayer} 
           playerNames={playerNames}
-          actionHandler={handleAction} />}
-      </div>
-      <div className="h-[2rem]">
-
-      </div>
-      {gameState &&
+          actionHandler={handleAction} />
+        
+        <div className="h-[1rem]"></div>
+        
         <BotTypeSelector botType={botType} setBotType={setBotType} />
-      }
+        
+        <div className="h-[1rem]"></div>
+        
+        <NewGameSection newGameNumPlayers={newGameNumPlayers} setNewGameNumPlayers={setNewGameNumPlayers} 
+          handleNewGame={handleNewGame} />
+        
+        <div className="h-[1rem]"></div>
+
+        <div className="max-w-[500px] text-sm">
+          <p>
+            <a href=""><i>No Thanks</i></a> is a game by Thorsten Gimmler. 
+            NoThanksBot is developed by <a href="">Jerome Williams</a>. 
+            NoThanksBot is unaffiliated with Thorsten Gimmler or any publishers of No Thanks.
+            Code for NoThanksBot is <a href="">here</a>.
+          </p>
+        </div>
+      
+      </div>}
     </div>
   );
 }
@@ -119,4 +147,37 @@ function BotTypeSelector({ botType, setBotType }: { botType : string, setBotType
       </div>
     </div>
   );
+}
+interface NewGameSectionProps {
+  newGameNumPlayers: number;
+  setNewGameNumPlayers: (numPlayers: number) => void;
+  handleNewGame: () => void;
+}
+function NewGameSection({ newGameNumPlayers, setNewGameNumPlayers, handleNewGame } : NewGameSectionProps) {
+  return (
+    <div className="flex flex-col gap-2 border border-gray-500 border-dashed rounded-lg p-2 text-sm items-center">
+      <div className="text-center font-bold">
+        New Game
+      </div>
+      <div className="flex flex-col gap-0 items-left justify-start">
+        <div className="flex flex-row gap-1 items-center justify-start">
+          <input type="radio" id="numPlayers3" name="numPlayers" value="numPlayers3" onClick={() => setNewGameNumPlayers(3)} checked={newGameNumPlayers==3}/>
+          <label htmlFor="numPlayers3">3 players</label>
+        </div>
+        <div className="flex flex-row gap-1 items-center justify-start">
+          <input type="radio" id="numPlayers4" name="numPlayers" value="numPlayers4" onClick={() => setNewGameNumPlayers(4)} checked={newGameNumPlayers==4}/>
+          <label htmlFor="numPlayers4">4 players</label>
+        </div>
+        <div className="flex flex-row gap-1 items-center justify-start">
+          <input type="radio" id="numPlayers5" name="numPlayers" value="numPlayers5" onClick={() => setNewGameNumPlayers(5)} checked={newGameNumPlayers==5}/>
+          <label htmlFor="numPlayers5">5 players</label>
+        </div>
+      </div>
+      <div className="">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-xl" onClick={handleNewGame}>
+          Start
+        </button>
+      </div>
+    </div>
+  )
 }
