@@ -1,5 +1,6 @@
 
 // import { useState, useEffect } from 'react';
+import { MCTSGameState } from './mcts';
 import { NoThanksState } from './NoThanks';
 import Image from 'next/image';
 
@@ -16,7 +17,7 @@ export default function NoThanksBoard({gameState, humanPlayer, playerNames, acti
 
   return (
     <div className="flex flex-col gap-2 p-2 min-w-[24rem] max-w-[48rem]">
-      <MessageArea message={`It is ${playerNames[gameState.currentPlayer]}'s turn.`} />
+      <MessageArea gameState={gameState} playerNames={playerNames} />
 
       <ActionButtonArea gameState={gameState} actionHandler={actionHandler} />
 
@@ -78,7 +79,9 @@ interface PlayerAreaProps {
 function PlayerArea({ gameState, humanPlayer, playerNames, playerIndex }: PlayerAreaProps) {
   return (
     
-    <div className={`border-black border-dashed border border-gray-500 rounded-xl p-2 flex flex-row gap-1 items-start ${gameState.currentPlayer == playerIndex ? ' bg-[beige] ' : ' bg-white '}`}>
+    <div className={`border-black border-dashed border border-gray-500 rounded-xl p-2 flex flex-row gap-1 items-start 
+    ${gameState.currentPlayer == playerIndex ? ' bg-[beige] ' : ' bg-white '}
+    ${gameState.isGameOver() && gameState.getWinner() === playerIndex ? ' shadow-hl shadow-blue-300 ' : ' '} `}>
         
       {/* status area container */}
       <div className="flex flow-col justify-start grow-0 shrink-0">
@@ -167,12 +170,36 @@ function ActionButtonArea({ gameState, actionHandler }: ActionButtonAreaProps) {
   );
 }
 
-function MessageArea({ message }: { message: string }) {
-  return (
-    <div className=" p-2 bg-[gold] flex flex-row justify-center font-bold">
-      {message}
-    </div>
-  );
+function MessageArea({ gameState, playerNames }: { gameState: NoThanksState, playerNames: string[] }) {
+  
+
+  if (gameState.isGameOver()) {
+    const winner = gameState.getWinner();
+    const colorClassName = 
+    (winner === 0) ? 'text-player-0' 
+    : (winner === 1) ? 'text-player-1'
+    : (winner === 2) ? 'text-player-2'
+    : (winner === 3) ? 'text-player-3' : '';
+    return (
+      <div className="p-2 bg-[gold] flex flex-row justify-center font-bold">
+        Game over!&nbsp;<span className={colorClassName}> {playerNames[winner]}</span>&nbsp;wins!
+      </div>
+    );
+  } else {
+    const colorClassName = 
+    (gameState.currentPlayer === 0) ? 'text-player-0' 
+    : (gameState.currentPlayer === 1) ? 'text-player-1'
+    : (gameState.currentPlayer === 2) ? 'text-player-2'
+    : (gameState.currentPlayer === 3) ? 'text-player-3' : '';
+
+    return (
+      <div className="p-2 bg-[gold] flex flex-row justify-center font-bold">
+        It is&nbsp;
+        <span className={colorClassName}> {playerNames[gameState.currentPlayer]} </span>
+        ’s turn.
+      </div>
+    );
+  }
 }
 
 interface GameCardProps {

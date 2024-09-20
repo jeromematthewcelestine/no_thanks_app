@@ -41,6 +41,7 @@ export class NoThanksState implements MCTSGameState {
   coinsInPlay: number;
   playerScores: number[];
   gameOver: boolean;
+  winner: number;
   
   constructor(game: NoThanksGame, doRandomization: boolean = true, firstCard: number | null = null) {
     this.game = game;
@@ -57,6 +58,7 @@ export class NoThanksState implements MCTSGameState {
     this.coinsInPlay = 0;
     this.currentPlayer = 0;
     this.gameOver = false;
+    this.winner = -1;
     // initialize deck to a boolean array of length maxCard - minCard + 1, initially all true
     
     // deal first card
@@ -116,6 +118,13 @@ export class NoThanksState implements MCTSGameState {
 
   isGameOver(): boolean {
     return this.gameOver;
+  }
+  getWinner(): number {
+    if (!this.gameOver) {
+      return -1;
+    }
+
+    return this.winner;
   }
 
   getLegalActions(): number[] {
@@ -183,6 +192,7 @@ export class NoThanksState implements MCTSGameState {
       } else {
         this.cardInPlay = null;
         this.gameOver = true;
+        this.winner = this.calculateWinner();
       }
 
       this.playerScores = this.calculateScores();
@@ -199,7 +209,7 @@ export class NoThanksState implements MCTSGameState {
     
   }
 
-  getWinner(): number {
+  calculateWinner(): number {
     if (!this.gameOver) {
       return -1;
     }
@@ -269,8 +279,7 @@ export class NoThanksState implements MCTSGameState {
       return Array.from({ length: this.game.numPlayers }, () => 0);
     }
 
-    const winner = this.getWinner();
-    return Array.from({ length: this.game.numPlayers }, (_, i) => (i === winner ? 1 : -1));
+    return Array.from({ length: this.game.numPlayers }, (_, i) => (i === this.winner ? 1 : -1));
   }
 
   toString(): string {

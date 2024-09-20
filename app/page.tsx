@@ -5,17 +5,22 @@ import { mcts } from "./mcts";
 import { NoThanksGame, NoThanksState } from "./NoThanks";
 import { useEffect, useState } from "react";
 
+
+
 export default function App() {
+
   const game = new NoThanksGame(
     3,
-    20,
+    35,
     3,
-    6,
-    4
+    11,
+    9
   );
+
   const [gameState, setGameState] = useState<NoThanksState>();
   const [humanPlayer, setHumanPlayer] = useState(0);
   const [playerNames, setPlayerNames] = useState(["Player", "Alice", "Bob"]);
+  const [botType, setBotType] = useState("mcts01");
   const [isBotTurn, setIsBotTurn] = useState(false);
 
   useEffect(() => {
@@ -23,8 +28,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    // console.log("gameState or isBotTurn changed");
-    // console.log("isBotTurn", isBotTurn);
     if (gameState?.currentPlayer !== humanPlayer && !gameState?.isGameOver()) {
       handleBotTurn();
     }
@@ -38,23 +41,21 @@ export default function App() {
 
     await new Promise(r => setTimeout(r, 50));
 
-    const botAction = mcts(gameState, 1, true);
+    let botTime = 1;
+    if (botType === "mcts01") {
+      botTime = 1;
+    } else if (botType === "mcts02") {
+      botTime = 2;
+    } else if (botType === "mcts05") {
+      botTime = 5;
+    }
+    const botAction = mcts(gameState, botTime, true);
 
     const newGameState = gameState.clone();
     newGameState.applyAction(botAction);
     setGameState(newGameState);
 
-    // setGameState(prevState => {
-    //   const newState = prevState?.clone();
-    //   newState?.applyAction(botAction);
-    //   return newState;
-    // });
-
     setIsBotTurn(newGameState.getCurrentPlayer() !== humanPlayer);
-    // setIsBotTurn(prevIsBotTurn => {
-    //   const currentPlayer = gameState.getCurrentPlayer();
-    //   return currentPlayer !== humanPlayer && !gameState.isGameOver();
-    // });
   }
 
   const handleAction = (action: number) => {
@@ -76,7 +77,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-2">
       <div id="title">
         NoThanksBot
       </div>
@@ -87,6 +88,34 @@ export default function App() {
           humanPlayer={humanPlayer} 
           playerNames={playerNames}
           actionHandler={handleAction} />}
+      </div>
+      <div className="h-[2rem]">
+
+      </div>
+      {gameState &&
+        <BotTypeSelector botType={botType} setBotType={setBotType} />
+      }
+    </div>
+  );
+}
+
+function BotTypeSelector({ botType, setBotType }: { botType : string, setBotType: (botType: string) => void }) {
+  return (
+    <div className="flex flex-col gap-0 border border-gray-500 border-dashed rounded-lg p-2 text-sm">
+      <div className="text-center font-bold pb-2">
+        Bot Type
+      </div>
+      <div className="flex flex-row gap-1 items-center justify-start">
+        <input type="radio" id="mcts01" name="bot-type" value="mcts01" onClick={() => setBotType("mcts01")} checked={botType=="mcts01"}/>
+        <label htmlFor="mcts01">MCTS (1 second)</label>
+      </div>
+      <div className="flex flex-row gap-1 items-center justify-start">
+        <input type="radio" id="mcts02" name="bot-type" value="mcts02" onClick={() => setBotType("mcts02")} checked={botType=="mcts02"}/>
+        <label htmlFor="mcts02">MCTS (2 seconds)</label>
+      </div>
+      <div className="flex flex-row gap-1 items-center justify-start">
+        <input type="radio" id="mcts05" name="bot-type" value="mcts05" onClick={() => setBotType("mcts05")} checked={botType=="mcts05"} />
+        <label htmlFor="mcts05">MCTS (5 seconds)</label>
       </div>
     </div>
   );

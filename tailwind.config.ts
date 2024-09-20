@@ -16,6 +16,9 @@ const config: Config = {
         "player-2": "green",
         "player-3": "orange",
       },
+      boxShadow: {
+        "hl": "0 0 5px 2px",
+      },
     },
   },
   plugins: [],
