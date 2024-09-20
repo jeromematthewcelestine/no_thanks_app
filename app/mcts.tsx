@@ -13,22 +13,24 @@ class MCTSNode {
   parent: MCTSNode | null;
   children: MCTSNode[];
   action: number | null;
-  value: number;
+  values: number[];
   visits: number;
 
   constructor(state: MCTSGameState, parent: MCTSNode | null = null, action: number | null = null) {
+
+    const nPlayers = state.getNPlayers();
     this.state = state;
     this.parent = parent;
     this.children = [];
     this.action = action;
-    this.value = 0;
+    this.values = new Array(nPlayers).fill(0);
     this.visits = 0;
   }
 }
 
 export function mcts(rootState: MCTSGameState, 
   timeLimitSeconds: number, 
-  verbose : boolean = false): number {
+  verbose : boolean = true): number {
   const root = new MCTSNode(rootState);
 
   const startTime = Date.now();
@@ -45,20 +47,33 @@ export function mcts(rootState: MCTSGameState,
     }
 
     const values = simulate(node.state);
-    // console.log(values);
-
-    if (verbose === true) {
-      // for each child of the node, print the action, value, and number of visits
-      node.children.forEach(child => console.log(child.action, child.value, child.visits));
-    }
 
     backpropagate(node, values);
   }
 
-  root.children.forEach(child => console.log(child.action, child.value, child.visits, child.value / child.visits));
+  if (verbose === true) {
+    // for each child of the node, print the action, value, and number of visits
+    const activePlayer = root.state.getCurrentPlayer();
+    root.children.forEach(child => 
+      {
+        console.log("Action: ", child.action);
+        console.log("Value: ", child.values[activePlayer] );
+        console.log("Visits: ", child.visits);
+        console.log("Average value: ", child.values[activePlayer] / child.visits);
+      });
+  }
 
+  // select child with most visits
+  const activePlayer = root.state.getCurrentPlayer();
   const bestChild = root.children.reduce((a, b) => (a.visits > b.visits ? a : b));
-  return bestChild.action || -1;
+  if (bestChild.action === null) {
+    return -1;
+  } else {
+    return bestChild.action;
+  }
+
+  // const bestChild = root.children.reduce((a, b) => (a.visits > b.visits ? a : b));
+  // return bestChild.action || -1;
 }
 
 function is_leaf(node: MCTSNode): boolean {
@@ -83,7 +98,8 @@ function select(node: MCTSNode): MCTSNode {
 }
 
 function ucb1(parent: MCTSNode, child: MCTSNode): number {
-  const exploitation = child.value / child.visits;
+  const activePlayer = parent.state.getCurrentPlayer();
+  const exploitation = child.values[activePlayer] / child.visits;
   const exploration = Math.sqrt(2 * Math.log(parent.visits) / child.visits);
   return exploitation + exploration;
 }
@@ -117,11 +133,19 @@ function simulate(state: MCTSGameState): number[] {
 
 function backpropagate(node: MCTSNode, values: number[]): void {
   let currentNode: MCTSNode | null = node;
+  const nPlayers = values.length;
   while (currentNode !== null) {
     currentNode.visits++;
-    if (currentNode.parent !== null) {
-      currentNode.value += values[currentNode.parent.state.getCurrentPlayer()];
+    
+    if (!currentNode.values) {
+      currentNode.values = new Array(nPlayers).fill(0);
     }
+    
+    // Update values for all players
+    for (let i = 0; i < nPlayers; i++) {
+      currentNode.values[i] += values[i];
+    }
+    
     currentNode = currentNode.parent;
   }
 }
