@@ -39,6 +39,7 @@ export class NoThanksState implements MCTSGameState {
   playerCoins: number[];
   cardInPlay: number | null;
   coinsInPlay: number;
+  playerScores: number[];
   gameOver: boolean;
   
   constructor(game: NoThanksGame, doRandomization: boolean = true, firstCard: number | null = null) {
@@ -51,6 +52,7 @@ export class NoThanksState implements MCTSGameState {
     this.playerCardsGrouped = Array.from({ length: game.numPlayers }, () => []);
     // initialize player coins to an array of numCoins, one for each player
     this.playerCoins = Array.from({ length: game.numPlayers }, () => game.numCoins);
+    this.playerScores = Array.from({ length: game.numPlayers }, () => -game.numCoins);
     this.cardInPlay = null;
     this.coinsInPlay = 0;
     this.currentPlayer = 0;
@@ -68,10 +70,7 @@ export class NoThanksState implements MCTSGameState {
         this.deck[this.cardInPlay - game.minCard] = false;
         this.numCardsInDeck -= 1;
       }
-    } else {
-
     }
-    
 
   }
 
@@ -108,6 +107,7 @@ export class NoThanksState implements MCTSGameState {
     newState.playerCards = this.playerCards.map(cards => [...cards]);
     newState.playerCardsGrouped = this.playerCardsGrouped.map(groups => groups.map(group => group.slice()));
     newState.playerCoins = this.playerCoins.slice();
+    newState.playerScores = this.playerScores.slice();
     newState.cardInPlay = this.cardInPlay;
     newState.coinsInPlay = this.coinsInPlay;
     newState.gameOver = this.gameOver;
@@ -148,11 +148,13 @@ export class NoThanksState implements MCTSGameState {
       this.coinsInPlay = 0;
       this.playerCards[this.currentPlayer].push(this.cardInPlay!);
 
+      
+
       // update playerCardsGrouped
       this.playerCardsGrouped[this.currentPlayer] = [];
       const cardsSorted = this.playerCards[this.currentPlayer].slice().sort((a, b) => a - b);
-      console.log("Player " + this.currentPlayer + " cards:");
-      console.log(cardsSorted);
+      // console.log("Player " + this.currentPlayer + " cards:");
+      // console.log(cardsSorted);
 
       let prevCard = -1;
       let currentGroup : number[] = [];
@@ -183,12 +185,17 @@ export class NoThanksState implements MCTSGameState {
         this.gameOver = true;
       }
 
+      this.playerScores = this.calculateScores();
+
     } else if (action === NoThanksState.ACTION_PASS) {
       this.playerCoins[this.currentPlayer] -= 1;
       this.coinsInPlay += 1;
       this.currentPlayer = (this.currentPlayer + 1) % this.game.numPlayers;
-      
+    
+      this.playerScores = this.calculateScores();
     }
+
+    
     
   }
 
