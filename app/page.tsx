@@ -104,14 +104,12 @@ export default function App() {
             </div>
           ))}
         </div>
-        {/* <Image src="NTB_logo_04.svg" alt="No Thanks!" width="200" height="100" /> */}
-        {/* NoThanksBot */}
 
       </div>
       {gameState &&
       <div className="flex flex-col items-center gap-2">
 
-        <div className="rounded-xl border border-dashed border-black p-2">
+        <div className="rounded-xl border border-gray-400 p-2 shadow-md shadow-gray-200  flex flex-col items-center" >
           
           <NoThanksBoard 
             gameState={gameState} 
