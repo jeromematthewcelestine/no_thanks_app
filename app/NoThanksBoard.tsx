@@ -13,10 +13,9 @@ interface NoThanksBoardProps {
 
 export default function NoThanksBoard({gameState, humanPlayer, playerNames, actionHandler} : NoThanksBoardProps) {
 
-  // console.log(gameState.toString());
-
   return (
     <div className="flex flex-col gap-2 p-2 min-w-[24rem] max-w-[48rem]">
+
       <MessageArea gameState={gameState} playerNames={playerNames} />
 
       <ActionButtonArea gameState={gameState} actionHandler={actionHandler} />

@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+}
+a {
+  color: olivedrab;
+}
+
 
 .card-value-3 { color:#fa6e6e; border-color: #fa6e6e}
 .card-value-4 { color:#f66b73; border-color:#f66b73}

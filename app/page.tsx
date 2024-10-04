@@ -4,6 +4,7 @@ import NoThanksBoard from "./NoThanksBoard";
 import { mcts } from "./mcts";
 import { NoThanksGame, NoThanksState } from "./NoThanks";
 import { useEffect, useState } from "react";
+import  Image  from "next/image";
 
 
 export default function App() {
@@ -88,23 +89,41 @@ export default function App() {
     }
   }
 
+  const titleLetterGroups = [["N", "O"], ["T", "H", "A", "N", "K", "S"], ["B", "O", "T"]];
+
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div id="title">
-        NoThanksBot
+    <div className="flex flex-col items-center gap-2 pt-2">
+      <div id="title" className="bg-white rounded-md text-black p-2 font-bold text-lg">
+        <div className="flex flex-row gap-3 ">
+          {/* title letters in reverse */}
+          {titleLetterGroups.map((titleLetterGroup, index) => (
+            <div className="flex flex-row-reverse gap-1">
+              {titleLetterGroup.reverse().map((letter, index) => (
+                <TitleCard cardText={letter} startOfGroup={index === titleLetterGroup.length-1} />
+              ))}
+            </div>
+          ))}
+        </div>
+        {/* <Image src="NTB_logo_04.svg" alt="No Thanks!" width="200" height="100" /> */}
+        {/* NoThanksBot */}
+
       </div>
       {gameState &&
       <div className="flex flex-col items-center gap-2">
+
+        <div className="rounded-xl border border-dashed border-black p-2">
           
-        <NoThanksBoard 
-          gameState={gameState} 
-          humanPlayer={humanPlayer} 
-          playerNames={playerNames}
-          actionHandler={handleAction} />
-        
-        <div className="h-[1rem]"></div>
-        
-        <BotTypeSelector botType={botType} setBotType={setBotType} />
+          <NoThanksBoard 
+            gameState={gameState} 
+            humanPlayer={humanPlayer} 
+            playerNames={playerNames}
+            actionHandler={handleAction} />
+          
+          <div className="h-[1rem]"></div>
+          
+          <BotTypeSelector botType={botType} setBotType={setBotType} />
+
+        </div>
         
         <div className="h-[1rem]"></div>
         
@@ -113,13 +132,15 @@ export default function App() {
         
         <div className="h-[1rem]"></div>
 
-        <div className="max-w-[500px] text-sm">
-          <p>
-            <a href=""><i>No Thanks</i></a> is a game by Thorsten Gimmler. 
-            NoThanksBot is developed by <a href="">Jerome Williams</a>. 
-            NoThanksBot is unaffiliated with Thorsten Gimmler or any publishers of No Thanks.
-            Code for NoThanksBot is <a href="">here</a>.
-          </p>
+        <div className="m-0 text-sm p-2">
+          <ul>
+            <li><i>NoThanksBot</i> is developed by <a href="https://www.jeromewilliams.net/">Jerome Williams</a>. </li>
+            <li><a href="https://boardgamegeek.com/boardgame/12942/no-thanks"><i>No Thanks!</i></a> is a game by Thorsten Gimmler.</li>
+            <li>NoThanksBot is unaffiliated with Thorsten Gimmler or any publishers of <i>No Thanks!</i></li>
+            <li>Code for NoThanksBot is <a href="">here</a>.</li>
+            <li>&copy; Jerome Williams 2024</li>
+          </ul>
+            
         </div>
       
       </div>}
@@ -129,7 +150,7 @@ export default function App() {
 
 function BotTypeSelector({ botType, setBotType }: { botType : string, setBotType: (botType: string) => void }) {
   return (
-    <div className="flex flex-col gap-0 border border-gray-500 border-dashed rounded-lg p-2 text-sm">
+    <div className="bg-white flex flex-col gap-0 border border-gray-500 border-dashed rounded-lg p-2 text-sm">
       <div className="text-center font-bold pb-2">
         Bot Type
       </div>
@@ -180,4 +201,16 @@ function NewGameSection({ newGameNumPlayers, setNewGameNumPlayers, handleNewGame
       </div>
     </div>
   )
+}
+
+function TitleCard({ cardText, startOfGroup }: { cardText: string, startOfGroup: boolean }) {
+  return (
+    <div className={
+      startOfGroup 
+      ? `relative rounded-md p-0.5 bg-white border border-black border-2 w-[40px] h-[60px] flex flex-col justify-center items-center font-bold `
+      : `relative rounded-md p-0.5 bg-white border border-black border-2 w-[40px] h-[60px] flex flex-col justify-start items-end text-sm ml-[-25px] font-bold`}>
+        {cardText}
+        
+    </div>
+  );
 }
