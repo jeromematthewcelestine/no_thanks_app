@@ -130,7 +130,7 @@ export default function App() {
             <li><i>NoThanksBot</i> is developed by <a href="https://www.jeromewilliams.net/">Jerome Williams</a>. </li>
             <li><a href="https://boardgamegeek.com/boardgame/12942/no-thanks"><i>No Thanks!</i></a> is a game by Thorsten Gimmler.</li>
             <li>NoThanksBot is unaffiliated with Thorsten Gimmler or any publishers of <i>No Thanks!</i></li>
-            <li>Code for NoThanksBot is <a href="">here</a>.</li>
+            <li>Code for NoThanksBot is <a href="https://github.com/jeromematthewcelestine/no_thanks_app/">here</a>.</li>
             <li>&copy; Jerome Williams 2024</li>
           </ul>
             
