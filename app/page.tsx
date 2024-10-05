@@ -4,50 +4,32 @@ import NoThanksBoard from "./NoThanksBoard";
 import { mcts } from "./mcts";
 import { NoThanksGame, NoThanksState } from "./NoThanks";
 import { useEffect, useState } from "react";
-import  Image  from "next/image";
+
 
 
 export default function App() {
+  
 
-  let game = new NoThanksGame(
-    3,
-    35,
-    3,
-    11,
-    9
-  );
-
+  
   const [gameState, setGameState] = useState<NoThanksState>();
-  const [humanPlayer, setHumanPlayer] = useState(0);
-  const [playerNames, setPlayerNames] = useState(["Player", "Alice", "Bob", "Charles", "Delia"]);
+  const [humanPlayer] = useState(0);
+  const [playerNames] = useState(["Player", "Alice", "Bob", "Charles", "Delia"]);
   const [botType, setBotType] = useState("mcts01");
-  const [isBotTurn, setIsBotTurn] = useState(false);
   const [newGameNumPlayers, setNewGameNumPlayers] = useState(3);  
 
   useEffect(() => {
-    setGameState(new NoThanksState(game));
-  }, []);
-
-  useEffect(() => {
-    if (gameState?.currentPlayer !== humanPlayer && !gameState?.isGameOver()) {
-      handleBotTurn();
-    }
-  }, [gameState]);
-
-  const handleNewGame = () => {
-    console.log('newGameNumPlayers', newGameNumPlayers);
-    game = new NoThanksGame(
+    const game = new NoThanksGame(
       3,
       35,
-      newGameNumPlayers,
+      3,
       11,
       9
     );
     setGameState(new NoThanksState(game));
-  }
+  }, []);
+
 
   const handleBotTurn = async () => {
-    console.log("handleBotTurn");
 
     if (!gameState)
       return;
@@ -67,8 +49,25 @@ export default function App() {
     const newGameState = gameState.clone();
     newGameState.applyAction(botAction);
     setGameState(newGameState);
+  }
 
-    setIsBotTurn(newGameState.getCurrentPlayer() !== humanPlayer);
+
+  useEffect(() => {
+    if (gameState?.currentPlayer !== humanPlayer && !gameState?.isGameOver()) {
+      handleBotTurn();  
+    }
+  }, [gameState, humanPlayer]);
+
+  const handleNewGame = () => {
+    console.log('newGameNumPlayers', newGameNumPlayers);
+    const game = new NoThanksGame(
+      3,
+      35,
+      newGameNumPlayers,
+      11,
+      9
+    );
+    setGameState(new NoThanksState(game));
   }
 
   const handleAction = (action: number) => {
@@ -83,10 +82,6 @@ export default function App() {
       newGameState.applyAction(NoThanksState.ACTION_PASS);
       setGameState(newGameState);
     }
-
-    if (newGameState.getCurrentPlayer() !== humanPlayer) {
-      setIsBotTurn(true);
-    }
   }
 
   const titleLetterGroups = [["N", "O"], ["T", "H", "A", "N", "K", "S"], ["B", "O", "T"]];
@@ -96,10 +91,10 @@ export default function App() {
       <div id="title" className="bg-white rounded-md text-black p-2 font-bold text-lg">
         <div className="flex flex-row gap-3 ">
           {/* title letters in reverse */}
-          {titleLetterGroups.map((titleLetterGroup, index) => (
-            <div className="flex flex-row-reverse gap-1">
+          {titleLetterGroups.map((titleLetterGroup, groupIndex) => (
+            <div key={`group` + groupIndex} className="flex flex-row-reverse gap-1">
               {titleLetterGroup.reverse().map((letter, index) => (
-                <TitleCard cardText={letter} startOfGroup={index === titleLetterGroup.length-1} />
+                <TitleCard key={index} cardText={letter} startOfGroup={index === titleLetterGroup.length-1} />
               ))}
             </div>
           ))}

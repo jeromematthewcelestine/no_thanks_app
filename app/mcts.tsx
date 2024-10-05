@@ -64,7 +64,7 @@ export function mcts(rootState: MCTSGameState,
   }
 
   // select child with most visits
-  const activePlayer = root.state.getCurrentPlayer();
+  // const activePlayer = root.state.getCurrentPlayer();
   const bestChild = root.children.reduce((a, b) => (a.visits > b.visits ? a : b));
   if (bestChild.action === null) {
     return -1;

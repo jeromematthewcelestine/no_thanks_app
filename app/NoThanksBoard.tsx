@@ -1,6 +1,4 @@
-
-// import { useState, useEffect } from 'react';
-import { MCTSGameState } from './mcts';
+// import { MCTSGameState } from './mcts';
 import { NoThanksState } from './NoThanks';
 import Image from 'next/image';
 
@@ -21,7 +19,7 @@ export default function NoThanksBoard({gameState, humanPlayer, playerNames, acti
       <ActionButtonArea gameState={gameState} actionHandler={actionHandler} />
 
       <div className="pt-4 pb-4">
-        <CommonPlayArea gameState={gameState} humanPlayer={humanPlayer} />
+        <CommonPlayArea gameState={gameState}  />
       </div>
       
       
@@ -35,9 +33,8 @@ export default function NoThanksBoard({gameState, humanPlayer, playerNames, acti
 
 interface CommonPlayAreaProps {
   gameState: NoThanksState;
-  humanPlayer: number;
 }
-function CommonPlayArea({ gameState, humanPlayer }: CommonPlayAreaProps) {
+function CommonPlayArea({ gameState }: CommonPlayAreaProps) {
   return (
     <div className="flex flex-col border border-gray-200 border-dashed p-4 rounded-xl">
       
